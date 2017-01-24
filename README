@@ -5,9 +5,16 @@ modules:
     description: functions that pass data between structured data files, python objects, subprocesses
     use_case:
      - combined with filter, transformation logic in python, can be used to create a complex data pipeline
+    done:
+      add_support:
+       - yaml
+       - json
+       - toml
+       - process
+       - data transformation using jinja2 template
     to_do:
       add_support:
-       - csv
+       - csv files
        - sql
        - no-sql
        - semi-structured data to be parsed with regex
