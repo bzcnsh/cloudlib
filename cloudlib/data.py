@@ -6,11 +6,30 @@ import yaml
 import toml
 import sys
 import subprocess
+import getopt
 
 def runProcess(cmd):
    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
    rtn = popen.communicate(input=sys.stdin)
    return {'returncode': popen.returncode, 'stdout': rtn[0], 'stderr': rtn[1]}
+
+def readCLI(cli_opts):
+   cli_opts_shorts = map(lambda x:(x['short'] if not x['has_value'] else x['short']+':'), cli_opts)
+   cli_opts_longs = map(lambda x:(x['long'] if not x['has_value'] else x['long']+'='), cli_opts)
+   cli_opts_all = map(lambda x:['-'+x['short'], '--'+x['long']], cli_opts)
+
+   opts, remainder = getopt.getopt(sys.argv[1:], ''.join(cli_opts_shorts), cli_opts_longs)
+   options = {}
+   for opt, arg in opts:
+      for index, value in enumerate(cli_opts_all):
+         if opt in value:
+            opt_name = cli_opts[index]['long']
+            if opt_name in options:
+               options[opt_name].append(arg)
+            else:
+               options[opt_name] = [arg]
+            break
+   return options
 
 def processTemplate(templateFile, templateVars):
    templateLoader = jinja2.FileSystemLoader( searchpath=os.path.dirname(templateFile) )
