@@ -1,0 +1,14 @@
+shared python modules.
+
+modules:
+  data:
+    description: functions that pass data between structured data files, python objects, subprocesses
+    use_case:
+     - combined with filter, transformation logic in python, can be used to create a complex data pipeline
+    to_do:
+      add_support:
+       - csv
+       - sql
+       - no-sql
+       - semi-structured data to be parsed with regex
+
