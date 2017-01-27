@@ -46,7 +46,8 @@ def runProcessFromTemplate(templateFile, templateVars):
    os.chmod(temp_file_name, 0755)
    rtn = runProcess([temp_file_name])
    rtn['command_text'] = cmd_text
-   os.remove(temp_file_name)
+   if not 'keepTempFile' in templateVars:
+      os.remove(temp_file_name)
    return rtn
 
 def readCLI(cli_opts):
