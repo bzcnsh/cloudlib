@@ -7,11 +7,46 @@ import toml
 import sys
 import subprocess
 import getopt
+import tempfile
+import os
 
+# description: runs a process and capture all its output, stdin is implicitly passed to
+# the new process
+#
+# parameters:
+#    cmd: a list of tokens
+#
+# output:
+#    a dictionary with these keys:
+#      returncode
+#      stdout
+#      stderr
+#      cmd
 def runProcess(cmd):
    popen = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
    rtn = popen.communicate(input=sys.stdin)
-   return {'returncode': popen.returncode, 'stdout': rtn[0], 'stderr': rtn[1]}
+   return {'returncode': popen.returncode, 'stdout': rtn[0], 'stderr': rtn[1], 'cmd': cmd}
+
+# description: create a shell script based on a template, then run it
+#
+# parameters:
+#    templateFile: path to template
+#    templateVars: variable to update placeholders in template
+# output:
+#    a dictionary with these keys:
+#      all keys from runProcess
+#      command_text: generate command from template
+
+def runProcessFromTemplate(templateFile, templateVars):
+   cmd_text = processTemplate(templateFile, templateVars)
+   temp_file = tempfile.NamedTemporaryFile(delete=False)
+   temp_file.write(cmd_text)
+   temp_file.close()
+   os.chmod(temp_file, 0o755)
+   rtn = runProcess([temp_file])
+   rtn['command_text'] = cmd_text
+   os.remove(temp_file)
+   return rtn
 
 def readCLI(cli_opts):
    cli_opts_shorts = map(lambda x:(x['short'] if not x['has_value'] else x['short']+':'), cli_opts)
