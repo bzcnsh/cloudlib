@@ -40,12 +40,13 @@ def runProcess(cmd):
 def runProcessFromTemplate(templateFile, templateVars):
    cmd_text = processTemplate(templateFile, templateVars)
    temp_file = tempfile.NamedTemporaryFile(delete=False)
+   temp_file_name = temp_file.name
    temp_file.write(cmd_text)
    temp_file.close()
-   os.chmod(temp_file, 0o755)
-   rtn = runProcess([temp_file])
+   os.chmod(temp_file_name, 0755)
+   rtn = runProcess([temp_file_name])
    rtn['command_text'] = cmd_text
-   os.remove(temp_file)
+   os.remove(temp_file_name)
    return rtn
 
 def readCLI(cli_opts):
