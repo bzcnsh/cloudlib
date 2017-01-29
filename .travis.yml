@@ -6,17 +6,14 @@ python: "2.7"
 sudo: true
 
 install:
-  - yum install -y wget
-  - wget https://bootstrap.pypa.io/get-pip.py
-  - python get-pip.py
-  - pip install pyyaml
-  - pip install Jinja2
-  - pip install toml
-
-  # Check ansible version
-  - ansible --version
+  - sudo yum install -y wget
+  - sudo wget https://bootstrap.pypa.io/get-pip.py
+  - sudo python get-pip.py
+  - sudo pip install pyyaml
+  - sudo pip install Jinja2
+  - sudo pip install toml
 
 script:
-  - python ./test/test.py
+  - python test/test.py
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
