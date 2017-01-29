@@ -17,5 +17,5 @@ modules:
        - csv files
        - sql
        - no-sql
-       - semi-structured data to be parsed with regex
+       - semi-structured data parsed with regex
 
