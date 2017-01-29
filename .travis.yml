@@ -1,0 +1,11 @@
+---
+language: python
+python: "2.7"
+
+# Use the new container infrastructure
+sudo: false
+
+script:
+  - python ./test/test.py
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
