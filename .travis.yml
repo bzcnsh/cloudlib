@@ -5,6 +5,17 @@ python: "2.7"
 # Use the new container infrastructure
 sudo: false
 
+install:
+  - yum install -y wget
+  - wget https://bootstrap.pypa.io/get-pip.py
+  - python get-pip.py
+  - pip install pyyaml
+  - pip install Jinja2
+  - pip install toml
+
+  # Check ansible version
+  - ansible --version
+
 script:
   - python ./test/test.py
 notifications:
