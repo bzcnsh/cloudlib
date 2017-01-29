@@ -1,5 +1,7 @@
 import sys
-sys.path.append('../')
+import os
+root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(root_dir)
 import unittest
 from cloudlib import data as clib
 import pprint
@@ -19,7 +21,7 @@ class UtilitiesTestCase(unittest.TestCase):
       assert cmp(rtn, expected) == 0, "unexpected result"
 
    def test_runProcessFromTemplate(self):
-      rtn = clib.runProcessFromTemplate('./runProcessFromTemplateTest', {'instring': 'test'})
+      rtn = clib.runProcessFromTemplate('runProcessFromTemplateTest', {'instring': 'test'})
       del rtn['cmd']
       expected = {'returncode': 0, 'stdout': "test\n", 'stderr': "", 'command_text': "#!/bin/bash\necho test"}
       assert cmp(rtn, expected) == 0, "unexpected result"
