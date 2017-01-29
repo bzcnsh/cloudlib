@@ -6,7 +6,6 @@ python: "2.7"
 sudo: true
 
 install:
-  - sudo yum install -y wget
   - sudo wget https://bootstrap.pypa.io/get-pip.py
   - sudo python get-pip.py
   - sudo pip install pyyaml
