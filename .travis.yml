@@ -6,11 +6,11 @@ python: "2.7"
 sudo: false
 
 install:
-  - sudo wget https://bootstrap.pypa.io/get-pip.py
-  - sudo python get-pip.py
-  - sudo pip install pyyaml
-  - sudo pip install Jinja2
-  - sudo pip install toml
+  - wget https://bootstrap.pypa.io/get-pip.py
+  - python get-pip.py
+  - pip install pyyaml
+  - pip install Jinja2
+  - pip install toml
 
 script:
   - python test/test.py
