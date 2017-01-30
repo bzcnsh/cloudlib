@@ -4,6 +4,7 @@
 import jinja2
 import yaml
 import toml
+import json
 import sys
 import subprocess
 import getopt
@@ -89,6 +90,28 @@ def merge(source, destination):
       else:
          destination[key] = value
    return destination
+
+def accessDataFile(filename, action, format=None):
+   knownExtensionFormats = {'.yml': 'yaml', '.yaml': 'yam', '.jsn': 'json', '.json': 'json', '.toml': 'toml'}
+   accessFormattedFile={
+     'yaml': {'read': readYamlFile, 'write': writeYamlFile},
+     'json': {'read': readJsonFile, 'write': writeJsonFile},
+     'toml': {'read': readTomlFile, 'write': writeTomlFile}
+   }
+   try:
+      if not format:
+         extension = os.path.splitext(filename)[1].lower()
+         format = knownExtensionFormats[extension]
+      return accessFormattedFile[format][action]
+   except:
+      print "missing or unsupported format or action"
+      raise
+
+def readDataFile(filename, format=None):
+   return accessDataFile(filename, 'read', format)(filename)
+
+def writeDataFile(filename, data, format=None):
+   accessDataFile(filename, 'write', format)(filename, data)
 
 def readYamlFile(filename):
    with open(filename, 'r') as stream:
