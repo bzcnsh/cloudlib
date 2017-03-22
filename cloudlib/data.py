@@ -2,14 +2,11 @@
 # create output string based on template file and dictionary object
 
 import jinja2
-import yaml
-import toml
-import json
-import sys
+import yaml,toml,json
 import subprocess
 import getopt
 import tempfile
-import os
+import os,sys,stat
 
 # description: runs a process and capture all its output, stdin is implicitly passed to
 # the new process
@@ -40,11 +37,11 @@ def runProcess(cmd):
 
 def runProcessFromTemplate(templateFile, templateVars):
    cmd_text = processTemplate(templateFile, templateVars)
-   temp_file = tempfile.NamedTemporaryFile(delete=False)
+   temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
    temp_file_name = temp_file.name
    temp_file.write(cmd_text)
    temp_file.close()
-   os.chmod(temp_file_name, 0755)
+   os.chmod(temp_file_name, stat.S_IXUSR|stat.S_IRUSR)
    rtn = runProcess([temp_file_name])
    rtn['command_text'] = cmd_text
    if not 'keepTempFile' in templateVars:
@@ -104,7 +101,7 @@ def accessDataFile(filename, action, format=None):
          format = knownExtensionFormats[extension]
       return accessFormattedFile[format][action]
    except:
-      print "missing or unsupported format or action"
+      print("missing or unsupported format or action")
       raise
 
 def readDataFile(filename, format=None):
